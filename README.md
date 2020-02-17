@@ -1,1 +1,1 @@
-# CS170
+This is a CS170 project on 8-tiles
