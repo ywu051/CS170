@@ -31,8 +31,42 @@ return;
 }
 
 bool board :: validMove(char c){
-
+  bool checkMove = false; // checks if the move is valid
+  if(c == 'w'){ // moves up
+    if(row == 0){ 
+      // cannot move up, checkMove still false
+    }
+    else{
+    checkMove = true;
+    }
+  }
+  else if(c == 's'){ // moves down
+     if(row == 2){ 
+      // cannot move down, checkMove still false
+    }
+    else{
+    checkMove = true;
+    }
+  }
+  else if(c == 'a'){ // moves left
+    if(col == 0){ 
+      // cannot move left, checkMove still false
+    }
+    else{
+    checkMove = true;
+    }
+  }
+  else if(c == 'd'){ // moves right
+    if(col == 2){ 
+      // cannot move right, checkMove still false
+    }
+    else{
+    checkMove = true;
+    }
+  }
+  return checkMove; 
 }
+
 
 void board :: moveUp(){
 
