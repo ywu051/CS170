@@ -7,15 +7,18 @@ using namespace std;
 class tree{
   private:
 
-  vector <board*> problems; //holds all nodes to traverse it
-
   public:
   
+  board* root;
+  board* curr;
+  board* prev;
   tree();
+  void createBoard();
   void goUp();
   void goDown();
   void goLeft();
   void goRight();
+  void displayBoard();
 
 };
 

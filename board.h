@@ -18,11 +18,12 @@ class board{
     bool validMove(char c); //check if it is valid
     int row=0;
     int col=0;
-    int depth = 0;
+    int depth = 1;
 
 public:
     board(); // creates the board
     board(board*);
+    void display(); // shows current board
     void moveUp();
     void moveDown();
     void moveLeft();
