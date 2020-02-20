@@ -3,6 +3,7 @@
 
 using namespace std;
 #include <vector>
+#include <cstdlib>
 
 class board{
   friend class tree;
@@ -18,7 +19,12 @@ class board{
     bool validMove(char c); //check if it is valid
     int row=0;
     int col=0;
-    int depth = 1;
+    int depth = 1; //creating board, root has depth 1
+    int cost; // cost of the heurstic function
+    board* up; // moves board state, use for adding child nodes
+    board* down; // moves board state, use for adding child nodes
+    board* left; // moves board state, use for adding child nodes
+    board* right; // moves board state, use for adding child nodes
 
 public:
     board* prev;
@@ -29,7 +35,10 @@ public:
     void moveDown();
     void moveLeft();
     void moveRight();
-
+    int heuristics(int h);
+    void addCost(int h, int d);
+    vector<char> allMoves();
+    void findManDist(int currNum, int &temprow, int &tempcol);
 
 };
 

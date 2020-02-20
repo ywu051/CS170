@@ -41,23 +41,57 @@ void tree :: createBoard(){
 }
 
 void tree :: goUp(){
+ if(curr->validMove('w')) {
+    board* child = new board(curr); // create a new child
+    
+    child->moveUp(); // change child state
+    
+    curr->up = child; // adds the child to curr state
+    
+    child->prev = curr; // prev node is parent/curr
 
-
+ } 
 }
 
-
 void tree :: goDown(){
+  if(curr->validMove('s')) {
+    board* child = new board(curr); // create a new child
+    
+    child->moveDown(); // change child state
+    
+    curr->down = child; // adds the child to curr state
+    
+    child->prev = curr; // prev node is parent/curr
 
+ } 
 
 }
 
 void tree :: goLeft(){
+  if(curr->validMove('a')) {
+    board* child = new board(curr); // create a new child
+    
+    child->moveLeft(); // change child state
+    
+    curr->left = child; // adds the child to curr state
+    
+    child->prev = curr; // prev node is parent/curr
 
+ } 
 
 }
 
 void tree :: goRight(){
+  if(curr->validMove('d')) {
+    board* child = new board(curr); // create a new child
+    
+    child->moveRight(); // change child state
+    
+    curr->right = child; // adds the child to curr state
+    
+    child->prev = curr; // prev node is parent/curr
 
+ } 
 
 }
 

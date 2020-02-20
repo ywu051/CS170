@@ -1,4 +1,5 @@
-  #include <iostream>
+#include <iostream>
+#include <cstdlib>
 using namespace std;
 
 #include "board.h"
@@ -117,5 +118,79 @@ void board :: moveRight(){
     arr[row][col] = 0;
     arr[row][col-1] = temp;
   }
+}
+
+int board:: heuristics(int h){
+  int count = 0;
+  if(h == 1){ //Uniform Cost Search, h(n) = 0
+    return 0;
+  }
+  else if(h == 2){ //Misplaced Tile
+    for(int i=0; i<3; ++i){
+      for(int j=0; j<3; ++j){
+        if((arr[i][j] != goal[i][j])){
+          ++count; // distance to goal
+        }
+      }
+    }
+  }
+  else if(h==3){ //Manhattan Distance
+    for(int i=0; i<3; ++i){
+      for(int j=0; j<3; ++j){
+        if((arr[i][j] != goal[i][j])){
+          int r = 0; //find the distance to goal
+          int c = 0; 
+          int tempr;
+          int tempc;
+          findManDist(arr[i][j],r,c);
+          tempr = abs(r - i);
+          tempc = abs(c - j);
+          count = tempr + tempc; // finds distance to goal
+        }
+      }
+    }
+  }
+  cout << count;
+  return count;
+}
+
+void board :: addCost(int h, int d){
+  int tempH = heuristics(h);
+  cout<< "heuristic: "<< tempH <<endl;
+  this->cost = tempH + d; // add heuristic function
+  return;
+}
+
+vector<char> board :: allMoves(){
+  vector<char> moves;
+  if(row != 0){ // check if it is top row, if not, push into allMoves
+    cout << arr[row-1][col] <<endl;
+    moves.push_back('w');
+  }
+  if(row != 2){ // check if it is last row, if not, push into allMoves
+    cout << arr[row+1][col] <<endl;
+    moves.push_back('s');
+  }
+  if(col != 0){ // check if it is left row, if not, push into allMoves
+    cout << arr[row][col-1] <<endl;
+    moves.push_back('a');
+  }
+  if(col != 2){ // check if it is right row, if not, push into allMoves
+    cout << arr[row][col+1] <<endl;
+    moves.push_back('d');
+  }
+  return moves;
+}
+
+void board :: findManDist(int a, int &temprow, int &tempcol) { // finds distance g(n) for Manhattan Distance
+	for(int i = 0; i < 3; ++i) {					
+		for(int j = 0; j < 3; ++j) {			
+			if(goal[i][j] == a){
+				temprow = i;
+				tempcol = j;
+				return;			
+			}
+		}
+	}
 }
 
