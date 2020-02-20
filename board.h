@@ -7,9 +7,9 @@ using namespace std;
 class board{
   friend class tree;
   private:
-    int arr[3][3] = {1, 2, 3,
-                     4, 5, 6, 
-                     7, 0, 8}; // test
+    int arr[3][3]  = {1, 2, 3,
+                      4, 5, 6, 
+                      7, 8, 0}; // test
 
     int goal[3][3] = {1, 2, 3, 
                       4, 5, 6, 
@@ -21,6 +21,7 @@ class board{
     int depth = 1;
 
 public:
+    board* prev;
     board(); // creates the board
     board(board*);
     void display(); // shows current board
