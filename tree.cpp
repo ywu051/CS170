@@ -302,6 +302,7 @@ void tree :: search(board* cur ,int heuristic){
       problem.erase( problem.begin()+lowestLocation ); // removes node
       lowestNode = problem.at(0);
       curr = lowestNode;
+      lowestLocation = 0;
 
       for(int i =0; i<problem.size();++i){
         problem.at(i)->display();
