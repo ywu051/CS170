@@ -1,24 +1,25 @@
 #include <iostream>
-#include <cstdlib>
 using namespace std;
 
 #include "board.h"
 #include <vector>
+#include <cmath>
 
 board::board(){
-  // empty board
+
 }
 
 board::board(board* newBoard){
+
   for(int i = 0 ; i < 3; ++i){
     for(int j = 0; j < 3; ++j){
       this->arr[i][j] = newBoard->arr[i][j];
     }
     
   }
+  this->depth = newBoard->depth +1;
   this->row = newBoard->row;
-  this->col = newBoard->row;
-  this->depth = newBoard->depth;
+  this->col = newBoard->col;
 }
 
 void board :: display(){
@@ -28,89 +29,84 @@ void board :: display(){
     }
     cout << endl;
   }
+  cout << endl;
 return; 
 }
 
 bool board :: validMove(char c){
-  bool checkMove = false; // checks if the move is valid
-  if(c == 'w'){ // moves up
-    if(row == 0){ 
-      // cannot move up, checkMove still false
+  bool checkMove = false; //default is false
+  if(c == 'w'){ //move up
+    if(row == 0){ //row 0 is the top 
+      checkMove = false;
     }
     else{
-    checkMove = true;
+      checkMove = true;
     }
   }
-  else if(c == 's'){ // moves down
-     if(row == 2){ 
-      // cannot move down, checkMove still false
+  else if(c == 's'){ //move down
+    if(row ==  2){ //row 2 is bottom
+      checkMove = false;
     }
     else{
-    checkMove = true;
+      checkMove = true;
     }
   }
-  else if(c == 'a'){ // moves left
-    if(col == 0){ 
-      // cannot move left, checkMove still false
+  else if(c == 'a'){ //move left
+    if(col == 0){ //col 0 is left
+      checkMove = false;
     }
     else{
-    checkMove = true;
+      checkMove = true;
     }
   }
-  else if(c == 'd'){ // moves right
-    if(col == 2){ 
-      // cannot move right, checkMove still false
+  else if(c == 'd'){ //move right
+    
+    if(col == 2){ // col 2 is right
+      checkMove = false;
     }
     else{
-    checkMove = true;
+      checkMove = true;
     }
   }
-  return checkMove; 
+
+  return checkMove;
 }
 
-
 void board :: moveUp(){
- if(!validMove('w')){ // check if it can move up
-    cout << "Not a Valid Move" <<endl;
-    }
-    else{ //swap places
-      --row;
-      int temp = this->arr[row][col]; // swap
-      arr[row][col] = 0; // new blank
-      arr[row+1][col] = temp;
-    }
+  if(!validMove('w')){
+  }
+    else{ 
+    --row;
+    int temp = this->arr[row][col];
+    arr[row][col] = 0;
+    arr[row+1][col] = temp;
+  }
 }
 
 void board :: moveDown(){
   if(!validMove('s')){
-    cout << "Not a Valid Move" <<endl;
-    }
-  else{
-      ++row;
-      int temp = arr[row][col]; 
-      arr[row][col] = 0;
-      arr[row-1][col] = temp;
-    
   }
-
+  else{
+    ++row;
+    int temp = arr[row][col];
+    arr[row][col] = 0;
+    arr[row-1][col] = temp;
+  }
 }
 
 void board :: moveLeft(){
   if(!validMove('a')){
-    cout << "Not a Valid Move" <<endl;
-    }
+  }
   else{
-      --col;
-      int temp = arr[row][col]; 
-      arr[row][col] = 0;
-      arr[row][col+1] = temp;
-    
+    --col;
+    int temp = arr[row][col];
+    arr[row][col] = 0;
+    arr[row][col+1] = temp;
   }
 }
 
 void board :: moveRight(){
   if(!validMove('d')){
-    cout << "Not a Valid Move" <<endl;
   }
   else{
     ++col;
@@ -120,25 +116,59 @@ void board :: moveRight(){
   }
 }
 
-int board:: heuristics(int h){
-  int count = 0;
-  if(h == 1){ //Uniform Cost Search, h(n) = 0
-    return 0;
+vector<char> board :: legalMoves(){
+  vector<char> c;
+  if(row != 0){
+    c.push_back('w');
   }
-  else if(h == 2){ //Misplaced Tile
+  if(row != 2){
+    c.push_back('s');
+  }
+  if(col != 0){
+    c.push_back('a');
+  }
+  if(col != 2){
+    c.push_back('d');
+  }
+  return c;
+}
+
+board board :: operator = (const board& b){
+  for(int i = 0 ; i < 3; ++i){
+    for(int j = 0; j < 3; ++j){
+      this->arr[i][j] = b.arr[i][j];
+    }
+    
+  }
+  this->row = b.row;
+  this->col = b.col;
+  return *this;
+}
+
+void board :: addScore(int h, int d){
+  int tempH = heuristics(h);
+  //cout<<"heuristic: "<<tempH<<endl;
+  this->score = tempH + d;
+  return;
+}
+
+int board:: heuristics(int h){
+  if(h==1){ //Uniform Cost
+  }
+  else if(h==2){ //Misplaced Tile
     for(int i=0; i<3; ++i){
       for(int j=0; j<3; ++j){
         if((arr[i][j] != goal[i][j])){
-          ++count; // distance to goal
+          ++count;
         }
       }
     }
   }
   else if(h==3){ //Manhattan Distance
-    for(int i=0; i<3; ++i){
+  for(int i=0; i<3; ++i){
       for(int j=0; j<3; ++j){
         if((arr[i][j] != goal[i][j])){
-          int r = 0; //find the distance to goal
+          int r = 0; 
           int c = 0; 
           int tempr;
           int tempc;
@@ -146,43 +176,41 @@ int board:: heuristics(int h){
           tempr = abs(r - i);
           tempc = abs(c - j);
           count = tempr + tempc; // finds distance to goal
+          return count;
         }
       }
     }
   }
-  cout << count;
   return count;
 }
 
-void board :: addCost(int h, int d){
-  int tempH = heuristics(h);
-  cout<< "heuristic: "<< tempH <<endl;
-  this->cost = tempH + d; // add heuristic function
-  return;
+
+string board :: getHash(){
+  string hash;
+  
+  for(int i=0; i< 3; ++i){
+    for(int j=0; j<3; ++j){
+      hash += ('0' + this->arr[i][j]);
+    }
+  }
+
+  return hash;
+
+}
+string board :: getHashGoal(){
+  string hash;
+  
+  for(int i=0; i< 3; ++i){
+    for(int j=0; j<3; ++j){
+      hash += ('0' + this->goal[i][j]);
+    }
+  }
+
+  return hash;
+
 }
 
-vector<char> board :: allMoves(){
-  vector<char> moves;
-  if(row != 0){ // check if it is top row, if not, push into allMoves
-    cout << arr[row-1][col] <<endl;
-    moves.push_back('w');
-  }
-  if(row != 2){ // check if it is last row, if not, push into allMoves
-    cout << arr[row+1][col] <<endl;
-    moves.push_back('s');
-  }
-  if(col != 0){ // check if it is left row, if not, push into allMoves
-    cout << arr[row][col-1] <<endl;
-    moves.push_back('a');
-  }
-  if(col != 2){ // check if it is right row, if not, push into allMoves
-    cout << arr[row][col+1] <<endl;
-    moves.push_back('d');
-  }
-  return moves;
-}
-
-void board :: findManDist(int a, int &temprow, int &tempcol) { // finds distance g(n) for Manhattan Distance
+void board :: findManDist(int a, int &temprow, int &tempcol) { // finds distance
 	for(int i = 0; i < 3; ++i) {					
 		for(int j = 0; j < 3; ++j) {			
 			if(goal[i][j] == a){
@@ -193,4 +221,3 @@ void board :: findManDist(int a, int &temprow, int &tempcol) { // finds distance
 		}
 	}
 }
-

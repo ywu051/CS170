@@ -13,6 +13,8 @@ int main() {
   t.createBoard();
   cin >> userH; 
   cout << userH << endl;
+  t.search(t.root, userH);
+
 
 return 0;
 }
